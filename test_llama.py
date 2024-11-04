@@ -1,24 +1,26 @@
 import asyncio
+import aiohttp
+from typing import List, Dict
+import re
 
-from services.GItService import GitService
-from services.LLMService import LLMService
-from services.prompts import prompt_for_get_interesting_files
+
+
+
+
 
 
 async def main():
-    ser = LLMService()
-    cc = GitService('fdsf')
+    github_url = "https://github.com/karpathy"
+    repos = await get_top_repos(github_url, 2)
 
-    all_files = cc.get_project_files()
-    changes_files = cc.get_changes_files_by_username("fsfds")
+    for i, repo in enumerate(repos, 1):
+        print(f"\n{i}. {repo['name']}")
+        print(f"Описание: {repo['description']}")
+        print(f"URL: {repo['url']}")
+        print(f"Последний коммит: {repo['last_commit_date']}")
+        print(f"Количество коммитов: {repo['commit_count']}")
+        print(f"Звёзд: {repo['stars']}")
 
-    print(all_files)
-    print(changes_files)
 
-    print("\n\n_______________________________________________________________________\n\n")
-
-    bb = await ser.fetch_completion(prompt_for_get_interesting_files(all_files, changes_files), {"max_tokens": 300})
-
-    print(bb)
-
-asyncio.run(main())
+if __name__ == "__main__":
+    asyncio.run(main())

@@ -34,8 +34,8 @@ class LLMService:
             }
 
             async with aiohttp.ClientSession() as session:
-                async with session.post(url, data=json.dumps(data), headers=headers) as response:
+                async with session.post(url, data=json.dumps(data, ensure_ascii=False), headers=headers) as response:
                     if response.status == 200:
                         return await response.json()
                     else:
-                        return f"Error: {response.status} - {await response.text()}"
+                        raise "LLM - error"
